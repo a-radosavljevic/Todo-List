@@ -1,26 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import NavBar from "./components/navbar";
+import TodoItems from "./components/todoItems";
+import "./App.css";
+import "bootstrap/dist/css/bootstrap.css";
+import "font-awesome/css/font-awesome.min.css";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  state = {
+    userName: "Aleksandar96"
+  };
+  render() {
+    return (
+      <React.Fragment>
+        <NavBar userName={this.state.userName}></NavBar>
+        <main className="container">
+          <TodoItems></TodoItems>
+        </main>
+      </React.Fragment>
+    );
+  }
 }
 
 export default App;
