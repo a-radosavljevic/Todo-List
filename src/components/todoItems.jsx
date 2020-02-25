@@ -126,7 +126,6 @@ class TodoItems extends Component {
   };
 
   SaveItem = item => {
-    console.log(item);
     let items = this.state.items;
     if (item.id === 0) {
       items.push(item);
