@@ -1,9 +1,11 @@
 import React, { Component } from "react";
+import { ToastContainer } from "react-toastify";
 import NavBar from "./components/navbar";
 import TodoItems from "./components/todoItems";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "font-awesome/css/font-awesome.min.css";
+import "react-toastify/dist/ReactToastify.css";
 
 class App extends Component {
   state = {
@@ -12,6 +14,7 @@ class App extends Component {
   render() {
     return (
       <React.Fragment>
+        <ToastContainer hideProgressBar newestOnTop></ToastContainer>
         <NavBar userName={this.state.userName}></NavBar>
         <main className="container">
           <TodoItems></TodoItems>

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import TodoItem from "./todoItem";
 import StateManipulationHeader from "./stateManipulationHeader";
+import { toast } from "react-toastify";
 
 class TodoItems extends Component {
   state = {
@@ -83,6 +84,8 @@ class TodoItems extends Component {
 
     elements[index].isFinished = !elements[index].isFinished;
     this.setState({ items: elements });
+
+    if (item.isFinished === true) toast.success("Task finished!");
   };
 
   handleHighlight = item => {
@@ -90,10 +93,13 @@ class TodoItems extends Component {
     let index = elements.indexOf(item);
     elements[index].starred = !elements[index].starred;
     this.setState({ items: elements });
+
+    if (item.starred === true) toast.success("Task highlighted");
   };
 
   handleDelete = item => {
     this.setState({ items: this.state.items.filter(x => x.id !== item.id) });
+    toast.success("Successfully deleted");
   };
 
   handleEdit = item => {
@@ -109,6 +115,7 @@ class TodoItems extends Component {
       renderItemManipulation: false,
       manipulatingItem: null
     });
+    toast.warning("State reseted!");
   };
 
   handleCreateNewItem = () => {
@@ -119,8 +126,16 @@ class TodoItems extends Component {
   };
 
   SaveItem = item => {
+    console.log(item);
     let items = this.state.items;
-    items.push(item);
+    if (item.id === 0) {
+      items.push(item);
+      toast.success("Task saved");
+    } else {
+      let index = items.indexOf(item);
+      items[index] = item;
+      toast.success("Task edited");
+    }
     this.setState({
       items: items,
       renderItemManipulation: false,
