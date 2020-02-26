@@ -123,3 +123,9 @@
   justify-content: center;
   align-items: center;
 }
+
+.button-without-border {
+  padding: 0 !important;
+  border: none !important;
+  background: none !important;
+}

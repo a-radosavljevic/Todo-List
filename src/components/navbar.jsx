@@ -18,6 +18,23 @@ class NavBar extends Component {
             {this.props.userName}
           </h5>
         </nav>
+        <div className="dropdown">
+          <button
+            className="btn dropdown-toggle button-without-border"
+            type="button"
+            data-toggle="dropdown"
+          >
+            <span className="caret"></span>
+          </button>
+          <ul className="dropdown-menu">
+            <li>
+              <a href="#logout">Profile</a>
+            </li>
+            <li>
+              <a href="#logout">Log out</a>
+            </li>
+          </ul>
+        </div>
       </div>
     );
   }
