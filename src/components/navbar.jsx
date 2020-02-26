@@ -8,15 +8,16 @@ class NavBar extends Component {
           <i className="fa fa-check-square-o fa-lg m-2 logo-element"></i>
           Todo list
         </h5>
+        <a className="btn btn-outline-primary" href="#logout">
+          <i className="fa fa-cog fa-lg m-2 logo-element"></i>
+          Settings
+        </a>
         <nav className="my-2 my-md-0 mr-md-3">
           <h5 className="p-2 text-dark">
             <i className="fa fa-user fa-lg m-2"></i>
             {this.props.userName}
           </h5>
         </nav>
-        <a className="btn btn-outline-primary" href="#signup">
-          Sign up
-        </a>
       </div>
     );
   }

@@ -8,7 +8,7 @@ class TodoItems extends Component {
     items: [
       {
         id: 1,
-        title: "Buy breakfust",
+        title: "Buy breakfast",
         description: "Go to store do purchase",
         starred: true,
         isFinished: true
@@ -38,7 +38,9 @@ class TodoItems extends Component {
 
     renderItemManipulation: false,
 
-    manipulatingItem: null
+    manipulatingItem: null,
+
+    searchQuery: ""
   };
 
   render() {
@@ -46,6 +48,8 @@ class TodoItems extends Component {
       x => x.isFinished === false
     );
     if (this.state.items.length === 0) return <h1>No items available</h1>;
+
+    let items = this.filterItems();
 
     return (
       <React.Fragment>
@@ -56,9 +60,11 @@ class TodoItems extends Component {
           manipulatingItem={this.state.manipulatingItem}
           onSave={this.SaveItem}
           onCancel={this.CancelManipulation}
+          searchQuery={this.state.searchQuery}
+          onSearchChange={this.handleSearch}
         ></StateManipulationHeader>
 
-        {this.state.items.map(item => (
+        {items.map(item => (
           <TodoItem
             key={item.id}
             onFinishTask={this.handleFinish}
@@ -76,6 +82,22 @@ class TodoItems extends Component {
       </React.Fragment>
     );
   }
+
+  //#region Helper methods
+
+  filterItems = () => {
+    if (this.state.searchQuery !== "")
+      return this.state.items.filter(
+        x =>
+          x.title.toLowerCase().includes(this.state.searchQuery) ||
+          x.description.toLowerCase().includes(this.state.searchQuery)
+      );
+    else return this.state.items;
+  };
+
+  //#endregion
+
+  //#region Event handlers
 
   handleFinish = item => {
     let elements = [...this.state.items];
@@ -148,6 +170,14 @@ class TodoItems extends Component {
       manipulatingItem: null
     });
   };
+
+  handleSearch = ({ currentTarget: input }) => {
+    this.setState({
+      searchQuery: input.value.toLowerCase()
+    });
+  };
+
+  //#endregion
 }
 
 export default TodoItems;

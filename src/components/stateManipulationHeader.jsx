@@ -1,23 +1,30 @@
 import React, { Component } from "react";
 import ItemDefinition from "./itemDefinition";
+import SearchInput from "./searchInput";
 
 class StateManipulationHeader extends Component {
   render() {
     return (
       <React.Fragment>
-        <div className="row">
-          <div className="col-md-6 col-xs-12">
+        <div className="row vertically-align">
+          <div className="col-md-2 col-xs-6">
             <button
-              className="btn btn-outline-primary btn-sm m-2"
+              className="btn btn-outline-primary btn-sm m-1"
               onClick={() => this.props.onResetState()}
             >
               <i className="fa fa-undo m-2"></i>
               Reset
             </button>
           </div>
-          <div className="col-md-6 col-xs-12">
+          <div className="col-md-8 col-xs-12">
+            <SearchInput
+              value={this.props.searchQuery}
+              onChange={this.props.onSearchChange}
+            ></SearchInput>
+          </div>
+          <div className="col-md-2 col-xs-6">
             <button
-              className="btn btn-outline-primary btn-sm m-2 pull-right"
+              className="btn btn-outline-primary btn-sm m-1 pull-right"
               onClick={() => this.props.onCreateNewItem()}
             >
               <i className="fa fa-plus m-2"></i>
