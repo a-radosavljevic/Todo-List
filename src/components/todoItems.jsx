@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import TodoItem from "./todoItem";
 import StateManipulationHeader from "./stateManipulationHeader";
 import { toast } from "react-toastify";
+import FilterItems from "./filterItems";
 
 class TodoItems extends Component {
   state = {
@@ -53,6 +54,8 @@ class TodoItems extends Component {
 
     return (
       <React.Fragment>
+        <FilterItems></FilterItems>
+
         <StateManipulationHeader
           onCreateNewItem={this.handleCreateNewItem}
           onResetState={this.handleReset}
