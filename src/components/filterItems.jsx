@@ -3,9 +3,28 @@ import FilterOptions from "./filterOptions";
 
 class FilterItems extends Component {
   state = {
-    isShowed: false
+    isShown: false,
   };
   render() {
+    const {
+      onResetFilters,
+      checkedFinished,
+      checkedUnfinished,
+      checkedStarred,
+      checkedUnstared,
+      setStatePropertyValue,
+    } = this.props;
+
+    const areFiltersUsed =
+      !checkedFinished ||
+      !checkedUnfinished ||
+      !checkedStarred ||
+      !checkedUnstared ? (
+        <i className="fa fa-asterisk" style={{ color: "gold" }}></i>
+      ) : (
+        ""
+      );
+
     return (
       <React.Fragment>
         <div
@@ -14,19 +33,28 @@ class FilterItems extends Component {
         >
           <i className="fa fa-tasks m-2"></i>{" "}
           <span className="btn m-2">
-            {this.state.isShowed && "Hide filters"}
-            {!this.state.isShowed && "Show filters"}
+            {this.state.isShown === true ? "Hide filters" : "Show filters"}
           </span>
+          {areFiltersUsed}
         </div>
 
-        {this.state.isShowed === true && <FilterOptions></FilterOptions>}
+        {this.state.isShown === true && (
+          <FilterOptions
+            onResetFilters={onResetFilters}
+            checkedFinished={checkedFinished}
+            checkedUnfinished={checkedUnfinished}
+            checkedStarred={checkedStarred}
+            checkedUnstared={checkedUnstared}
+            setStatePropertyValue={setStatePropertyValue}
+          ></FilterOptions>
+        )}
       </React.Fragment>
     );
   }
 
   toggleFilterOptions = () => {
     this.setState({
-      isShowed: !this.state.isShowed
+      isShown: !this.state.isShown,
     });
   };
 }

@@ -12,49 +12,59 @@ class TodoItems extends Component {
         title: "Buy breakfast",
         description: "Go to store do purchase",
         starred: true,
-        isFinished: true
+        isFinished: true,
       },
       {
         id: 2,
         title: "Code",
         description: "Implement components",
         starred: false,
-        isFinished: false
+        isFinished: false,
       },
       {
         id: 3,
         title: "Clean house",
         description: "Take care of your stuff",
         starred: true,
-        isFinished: false
+        isFinished: false,
       },
       {
         id: 4,
         title: "Go to walk",
         description: "Walk to park and take some breath",
         starred: true,
-        isFinished: true
-      }
+        isFinished: true,
+      },
     ],
 
     renderItemManipulation: false,
 
     manipulatingItem: null,
 
-    searchQuery: ""
+    searchQuery: "",
+
+    showFinished: true,
+    showUnfinished: true,
+
+    showStarred: true,
+    showUnstared: true,
   };
 
   render() {
-    let { length: tasksCount } = this.state.items.filter(
-      x => x.isFinished === false
-    );
-    if (this.state.items.length === 0) return <h1>No items available</h1>;
-
     let items = this.filterItems();
+
+    let { length: tasksCount } = items.filter((x) => x.isFinished === false);
 
     return (
       <React.Fragment>
-        <FilterItems></FilterItems>
+        <FilterItems
+          onResetFilters={this.handleResetFilters}
+          checkedFinished={this.state.showFinished}
+          checkedUnfinished={this.state.showUnfinished}
+          checkedStarred={this.state.showStarred}
+          checkedUnstared={this.state.showUnstared}
+          setStatePropertyValue={this.setStatePropertyValue}
+        ></FilterItems>
 
         <StateManipulationHeader
           onCreateNewItem={this.handleCreateNewItem}
@@ -67,16 +77,20 @@ class TodoItems extends Component {
           onSearchChange={this.handleSearch}
         ></StateManipulationHeader>
 
-        {items.map(item => (
-          <TodoItem
-            key={item.id}
-            onFinishTask={this.handleFinish}
-            onHighlight={this.handleHighlight}
-            onDelete={this.handleDelete}
-            onEdit={this.handleEdit}
-            item={item}
-          ></TodoItem>
-        ))}
+        {items.length > 0 ? (
+          items.map((item) => (
+            <TodoItem
+              key={item.id}
+              onFinishTask={this.handleFinish}
+              onHighlight={this.handleHighlight}
+              onDelete={this.handleDelete}
+              onEdit={this.handleEdit}
+              item={item}
+            ></TodoItem>
+          ))
+        ) : (
+          <h1>No items available</h1>
+        )}
 
         <hr />
         <div className="row pull-right">
@@ -89,20 +103,43 @@ class TodoItems extends Component {
   //#region Helper methods
 
   filterItems = () => {
-    if (this.state.searchQuery !== "")
-      return this.state.items.filter(
-        x =>
-          x.title.toLowerCase().includes(this.state.searchQuery) ||
-          x.description.toLowerCase().includes(this.state.searchQuery)
-      );
-    else return this.state.items;
+    const {
+      searchQuery,
+      showFinished,
+      showUnfinished,
+      showStarred,
+      showUnstared,
+    } = this.state;
+
+    if ((!showFinished && !showUnfinished) || (!showStarred && !showUnstared))
+      return [];
+
+    if (
+      searchQuery === "" &&
+      showFinished &&
+      showUnfinished &&
+      showStarred &&
+      showUnstared
+    )
+      return this.state.items;
+
+    return this.state.items.filter(
+      (x) =>
+        (x.title.toLowerCase().includes(searchQuery) ||
+          x.description.toLowerCase().includes(searchQuery)) &&
+        (x.isFinished === showFinished || x.isFinished !== showUnfinished) &&
+        (x.starred === showStarred || x.starred !== showUnstared)
+    );
   };
 
+  setStatePropertyValue = (name, value) => {
+    this.setState({ [name]: value });
+  };
   //#endregion
 
   //#region Event handlers
 
-  handleFinish = item => {
+  handleFinish = (item) => {
     let elements = [...this.state.items];
     let index = elements.indexOf(item);
     if (index === -1) throw new Error("Element not found");
@@ -113,7 +150,7 @@ class TodoItems extends Component {
     if (item.isFinished === true) toast.success("Task finished!");
   };
 
-  handleHighlight = item => {
+  handleHighlight = (item) => {
     let elements = [...this.state.items];
     let index = elements.indexOf(item);
     elements[index].starred = !elements[index].starred;
@@ -122,35 +159,44 @@ class TodoItems extends Component {
     if (item.starred === true) toast.success("Task highlighted");
   };
 
-  handleDelete = item => {
-    this.setState({ items: this.state.items.filter(x => x.id !== item.id) });
+  handleDelete = (item) => {
+    this.setState({ items: this.state.items.filter((x) => x.id !== item.id) });
     toast.success("Successfully deleted");
   };
 
-  handleEdit = item => {
+  handleEdit = (item) => {
     this.setState({ renderItemManipulation: true, manipulatingItem: item });
   };
 
   handleReset = () => {
     this.setState({
-      items: this.state.items.map(x => {
+      items: this.state.items.map((x) => {
         x.isFinished = false;
         return x;
       }),
       renderItemManipulation: false,
-      manipulatingItem: null
+      manipulatingItem: null,
     });
+    this.handleResetFilters();
     toast.warning("State reseted!");
   };
+
+  handleResetFilters = () =>
+    this.setState({
+      showFinished: true,
+      showUnfinished: true,
+      showStarred: true,
+      showUnstared: true,
+    });
 
   handleCreateNewItem = () => {
     this.setState({
       renderItemManipulation: !this.state.renderItemManipulation,
-      manipulatingItem: null
+      manipulatingItem: null,
     });
   };
 
-  SaveItem = item => {
+  SaveItem = (item) => {
     let items = this.state.items;
     if (item.id === 0) {
       items.push(item);
@@ -163,20 +209,20 @@ class TodoItems extends Component {
     this.setState({
       items: items,
       renderItemManipulation: false,
-      manipulatingItem: null
+      manipulatingItem: null,
     });
   };
 
   CancelManipulation = () => {
     this.setState({
       renderItemManipulation: false,
-      manipulatingItem: null
+      manipulatingItem: null,
     });
   };
 
   handleSearch = ({ currentTarget: input }) => {
     this.setState({
-      searchQuery: input.value.toLowerCase()
+      searchQuery: input.value.toLowerCase(),
     });
   };
 

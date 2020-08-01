@@ -2,49 +2,70 @@ import React, { Component } from "react";
 
 class FilterOptions extends Component {
   state = {};
+
   render() {
+    const {
+      onResetFilters,
+      checkedFinished,
+      checkedUnfinished,
+      checkedStarred,
+      checkedUnstared,
+    } = this.props;
+
     return (
       <div className="container">
         <hr />
+
         <div className="row">
           <div className="col-6">Showing items</div>
           <div className="col-6">
-            <input type="checkbox" name="chkUnfinishedItems"></input> Unfinished
             <input
               type="checkbox"
-              name="chkUnfinishedItems"
-            ></input> Finished <br></br>
-            <input type="checkbox" name="chkStarredItems"></input> Starred
+              defaultChecked={checkedFinished}
+              onChange={(e) => this.handleChangeChk(e)}
+              name="showFinished"
+            ></input>{" "}
+            Finished{" "}
             <input
               type="checkbox"
-              name="chkUnstarredItems"
-            ></input> Unstarred <br></br>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-6">Item lists</div>
-          <div className="col-6">
-            <input type="checkbox" name="chkUnfinishedItems"></input> Unfinished{" "}
+              defaultChecked={checkedUnfinished}
+              onChange={(e) => this.handleChangeChk(e)}
+              name="showUnfinished"
+            ></input>{" "}
+            Unfinished
             <br></br>
             <input
               type="checkbox"
-              name="chkUnfinishedItems"
-            ></input> Finished <br></br>
-            <input type="checkbox" name="chkStarredItems"></input> Starred{" "}
-            <br></br>
+              defaultChecked={checkedStarred}
+              onChange={(e) => this.handleChangeChk(e)}
+              name="showStarred"
+            ></input>{" "}
+            Starred{" "}
             <input
               type="checkbox"
-              name="chkUnstarredItems"
-            ></input> Unstarred <br></br>
+              defaultChecked={checkedUnstared}
+              onChange={(e) => this.handleChangeChk(e)}
+              name="showUnstared"
+            ></input>{" "}
+            Unstarred
+            <br></br>
           </div>
         </div>
+
         <div className="row text-center">
-          <button className="btn btn-outline-primary">Reset filters</button>
+          <button className="btn btn-outline-primary" onClick={onResetFilters}>
+            Reset filters
+          </button>
         </div>
+
         <hr />
       </div>
     );
   }
+
+  handleChangeChk = (e) => {
+    this.props.setStatePropertyValue(e.target.name, e.target.checked);
+  };
 }
 
 export default FilterOptions;
